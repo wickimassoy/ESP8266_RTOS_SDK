@@ -1,4 +1,5 @@
 stages:
+  - check
   - build
   - deploy
 
@@ -82,6 +83,9 @@ push_master_to_github:
     # (aka objectname) at tip of each branch, and if any SHAs match then it checks out the local branch
     # and then pushes that ref to a corresponding github branch
     - eval $(git for-each-ref --shell bash --format 'if [ $CI_COMMIT_SHA == %(objectname) ]; then git checkout -B %(refname:strip=3); git push --follow-tags github %(refname:strip=3); fi;' $GITHUB_PUSH_REFS)
+
+include:
+  - local: tools/ci/pre_commit.yml
 
 build_docs:
   stage: build
